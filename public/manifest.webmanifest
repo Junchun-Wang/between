@@ -1,0 +1,10 @@
+{
+  "name": "Between",
+  "short_name": "Between",
+  "description": "A private memory space for important relationships.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF9F6",
+  "theme_color": "#FFF9F6",
+  "orientation": "portrait"
+}

@@ -1,0 +1,18 @@
+:root {
+  --color-ink: #2b2630;
+  --color-muted: #766f7b;
+  --color-soft: #9a93a0;
+  --color-bg: #fff9f6;
+  --color-pink: #e6b3d8;
+  --color-pink-soft: #f4c8e4;
+  --color-lilac: #d8cbf6;
+  --color-blue: #bbdcf1;
+  --color-glass: rgba(255, 255, 255, 0.78);
+  --color-glass-strong: rgba(255, 255, 255, 0.9);
+  --radius-screen: 34px;
+  --radius-card: 28px;
+  --radius-pill: 999px;
+  --shadow-glass: 0 20px 48px rgba(159, 127, 168, 0.16);
+  --shadow-button: 0 12px 26px rgba(198, 137, 194, 0.28);
+  --font-ui: "Noto Sans SC", "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+}
