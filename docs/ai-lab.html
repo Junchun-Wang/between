@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Between｜AI Lab 项目</title>
+  <meta name="description" content="Between 是一个关于关系记忆、重要的人和 AI 轻量整理的中文 AI Lab 项目。">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #2b2630;
+      --muted: #766f7b;
+      --soft: #9a93a0;
+      --bg: #efebe3;
+      --glass: rgba(255, 255, 255, 0.78);
+      --line: rgba(43, 38, 48, 0.12);
+      --pink: #e6b3d8;
+      --lilac: #d8cbf6;
+      --blue: #bbdcf1;
+      --shadow: 0 20px 60px rgba(43, 38, 48, 0.16);
+      --soft-shadow: 0 16px 42px rgba(159, 127, 168, 0.14);
+      font-family: "Noto Sans SC", "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 5%, rgba(243, 183, 206, 0.42), transparent 31rem),
+        radial-gradient(circle at 88% 18%, rgba(187, 220, 241, 0.52), transparent 34rem),
+        radial-gradient(circle at 48% 86%, rgba(216, 203, 246, 0.4), transparent 34rem),
+        var(--bg);
+      line-height: 1.58;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { border: 0; cursor: pointer; }
+
+    .wrap {
+      width: min(1120px, calc(100vw - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(43, 38, 48, 0.08);
+      background: rgba(239, 235, 227, 0.78);
+      backdrop-filter: blur(18px);
+    }
+
+    .topbar-inner {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 850;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 11px;
+      background:
+        radial-gradient(circle at 35% 30%, #fff 0 9%, transparent 10%),
+        linear-gradient(135deg, var(--pink), var(--blue));
+      box-shadow: 0 12px 28px rgba(159, 127, 168, 0.18);
+    }
+
+    .nav {
+      display: flex;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero {
+      min-height: calc(100vh - 64px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 390px;
+      gap: 58px;
+      align-items: center;
+      padding: 58px 0 46px;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: rgba(138, 131, 141, 0.88);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 18px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { letter-spacing: 0; }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(46px, 6.2vw, 78px);
+      line-height: 1.04;
+      font-weight: 950;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      margin: 22px 0 0;
+      color: rgba(102, 94, 105, 0.92);
+      font-size: 19px;
+      line-height: 1.78;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border: 1px solid rgba(43, 38, 48, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.68);
+      color: var(--ink);
+      font-weight: 800;
+      box-shadow: var(--soft-shadow);
+    }
+
+    .button.primary {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff9f6;
+    }
+
+    .project-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 660px;
+      margin-top: 34px;
+    }
+
+    .meta-card {
+      min-height: 96px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.58);
+      backdrop-filter: blur(16px);
+    }
+
+    .meta-card span {
+      display: block;
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .meta-card strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .phone-area {
+      display: grid;
+      place-items: center;
+      min-height: 700px;
+    }
+
+    .phone-shell {
+      position: relative;
+      width: 390px;
+      height: 844px;
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 16% 6%, rgba(243, 183, 206, 0.46), transparent 30%),
+        radial-gradient(circle at 83% 14%, rgba(232, 221, 248, 0.68), transparent 33%),
+        radial-gradient(circle at 76% 48%, rgba(216, 237, 247, 0.54), transparent 30%),
+        radial-gradient(circle at 46% 78%, rgba(232, 221, 248, 0.52), transparent 36%),
+        linear-gradient(180deg, #fff9fc 0%, #fffefc 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .status-bar {
+      position: absolute;
+      z-index: 10;
+      top: 18px;
+      left: 28px;
+      right: 28px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(43, 38, 48, 0.88);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .dynamic-island {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 82px;
+      height: 28px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: #0d0c10;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      padding: 98px 28px 92px;
+    }
+
+    .screen.welcome { padding-top: 88px; }
+
+    .screen-title {
+      margin: 10px 0 0;
+      font-size: 34px;
+      font-weight: 950;
+      line-height: 1.16;
+    }
+
+    .screen-copy {
+      margin: 14px 0 0;
+      max-width: 330px;
+      color: rgba(102, 94, 105, 0.9);
+      font-size: 15px;
+    }
+
+    .welcome-title {
+      margin: 52px 0 0;
+      font-size: 50px;
+      line-height: 1.1;
+      font-weight: 950;
+    }
+
+    .welcome-types, .tool-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .welcome-types span, .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 13px;
+      border-radius: 999px;
+      color: rgba(43, 38, 48, 0.78);
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .glass-card {
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: 28px;
+      background: var(--glass);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .memory-preview, .app-card {
+      margin-top: 24px;
+      padding: 20px;
+    }
+
+    .memory-preview { min-height: 166px; margin-top: 42px; }
+
+    .memory-preview h2, .app-card h2 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+
+    .memory-preview time {
+      display: block;
+      margin-top: 8px;
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .memory-preview p, .app-card p {
+      margin: 12px 0 0;
+      color: rgba(102, 94, 105, 0.9);
+      font-size: 14px;
+      line-height: 1.62;
+    }
+
+    .soft-note {
+      position: absolute;
+      left: 50%;
+      bottom: 78px;
+      transform: translateX(-50%);
+      color: rgba(102, 94, 105, 0.78);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .primary-button {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 30px;
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff9f6;
+      font-size: 16px;
+      font-weight: 850;
+      box-shadow: 0 12px 26px rgba(198, 137, 194, 0.28);
+    }
+
+    .input-line, .textarea-fake {
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.66);
+      color: var(--ink);
+    }
+
+    .textarea-fake {
+      min-height: 150px;
+      border-radius: 24px;
+      color: rgba(118, 111, 123, 0.92);
+      font-size: 15px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 14px;
+    }
+
+    .chip.selected {
+      background: var(--ink);
+      color: #fff9f6;
+    }
+
+    .row-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--pink);
+      font-weight: 900;
+    }
+
+    .row h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .row p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .row span {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 42px;
+      right: 42px;
+      bottom: 24px;
+      height: 58px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .bottom-nav span {
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: rgba(43, 38, 48, 0.58);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .bottom-nav span.active {
+      background: var(--ink);
+      color: #fff9f6;
+    }
+
+    .section {
+      padding: 78px 0;
+      border-top: 1px solid rgba(43, 38, 48, 0.08);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.75fr) minmax(300px, 0.5fr);
+      gap: 38px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.12;
+      font-weight: 950;
+    }
+
+    .section-copy {
+      margin: 0;
+      color: rgba(102, 94, 105, 0.94);
+      font-size: 17px;
+      line-height: 1.76;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .info-card, .logic-card, .footer-card {
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.62);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .info-card {
+      min-height: 210px;
+      padding: 24px;
+    }
+
+    .info-card h3, .logic-card h3 {
+      margin: 0 0 12px;
+      font-size: 21px;
+    }
+
+    .info-card p, .logic-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .preview-layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 34px;
+      align-items: start;
+    }
+
+    .screen-switcher {
+      position: sticky;
+      top: 86px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .screen-switcher button {
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--muted);
+      text-align: left;
+      font-weight: 800;
+      border: 1px solid var(--line);
+    }
+
+    .screen-switcher button.active {
+      background: var(--ink);
+      color: #fff9f6;
+    }
+
+    .preview-copy {
+      display: grid;
+      gap: 16px;
+    }
+
+    .logic-card {
+      padding: 22px;
+    }
+
+    .logic-card code {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 6px 9px;
+      border-radius: 10px;
+      background: rgba(43, 38, 48, 0.08);
+      color: rgba(43, 38, 48, 0.8);
+      font-size: 13px;
+    }
+
+    .footer-card {
+      margin: 0 auto 60px;
+      padding: 42px;
+      text-align: center;
+    }
+
+    .footer-card h2 {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .footer-card p {
+      max-width: 700px;
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    footer {
+      padding: 0 0 34px;
+      color: var(--soft);
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .hero, .section-head, .preview-layout {
+        grid-template-columns: 1fr;
+      }
+      .phone-area { min-height: 760px; }
+      .screen-switcher {
+        position: static;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .wrap { width: min(100% - 28px, 1120px); }
+      .nav { display: none; }
+      .hero { padding-top: 36px; }
+      .project-meta, .grid { grid-template-columns: 1fr; }
+      .phone-shell {
+        width: 340px;
+        height: 736px;
+        transform: scale(0.94);
+        transform-origin: center top;
+      }
+      .phone-area { min-height: 710px; }
+      .screen { padding-left: 24px; padding-right: 24px; }
+      .screen-switcher { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>Between｜AI Lab</span>
+      </a>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#position">项目定位</a>
+        <a href="#screens">页面预览</a>
+        <a href="#logic">交互逻辑</a>
+        <a href="#next">下一步</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="wrap hero">
+      <div>
+        <p class="eyebrow">RELATION MEMORY</p>
+        <h1>记住那些重要的人</h1>
+        <p class="hero-copy">
+          Between 是一个中文的关系记忆 AI 实验。它沿用原项目里的产品内容：从“现在，谁对你很重要？”开始，记录“一个值得记住的瞬间”，再进入“今日、重要的人、时间线、洞察”的手机端流程。
+        </p>
+        <div class="actions">
+          <a class="button primary" href="http://127.0.0.1:5173/">打开原型</a>
+          <a class="button" href="https://github.com/Junchun-Wang/between">查看仓库</a>
+          <a class="button" href="./between-ai-lab.md">项目文案</a>
+        </div>
+        <div class="project-meta" aria-label="项目摘要">
+          <article class="meta-card">
+            <span>项目形态</span>
+            <strong>个人网站里的 AI Lab 实验</strong>
+          </article>
+          <article class="meta-card">
+            <span>核心内容</span>
+            <strong>重要的人、关系记忆、时间线、洞察</strong>
+          </article>
+          <article class="meta-card">
+            <span>原型技术</span>
+            <strong>React、TypeScript、Vite、Zustand</strong>
+          </article>
+        </div>
+      </div>
+
+      <div class="phone-area">
+        <div class="phone-shell" aria-label="Between 手机界面预览">
+          <div class="status-bar">
+            <span>9:41</span>
+            <span class="dynamic-island" aria-hidden="true"></span>
+            <span>●●●</span>
+          </div>
+          <div class="screen welcome">
+            <p class="eyebrow">Between</p>
+            <h2 class="welcome-title">记住那些<br>重要的人</h2>
+            <div class="welcome-types">
+              <span>文字</span>
+              <span>照片</span>
+              <span>语音</span>
+            </div>
+            <article class="glass-card memory-preview">
+              <h2>一段小小的记忆</h2>
+              <time>今天 22:18</time>
+              <p>那些没有被说出口的细节，也值得被好好保存</p>
+            </article>
+            <p class="soft-note">你的记忆只属于你自己</p>
+            <div class="primary-button">开始</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="section" id="position">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">项目定位</p>
+            <h2>不是人际关系管理，而是关系记忆实验。</h2>
+          </div>
+          <p class="section-copy">
+            这个包装不重新发明产品，而是把原项目已经有的内容放到个人网站里：它关注“那些对你重要的人”，让用户用文字、照片、语音保存关系里的小瞬间。
+          </p>
+        </div>
+        <div class="grid">
+          <article class="info-card">
+            <h3>从一个人开始</h3>
+            <p>原项目的 onboarding 问的是：“现在，谁对你很重要？” 名字、关系和一点原因，之后都可以慢慢补。</p>
+          </article>
+          <article class="info-card">
+            <h3>记录一个瞬间</h3>
+            <p>记录页问：“今天关于一个人，你想记住什么？” 一句话、一个场景，或者一种当时的感觉都可以。</p>
+          </article>
+          <article class="info-card">
+            <h3>等待线索浮现</h3>
+            <p>洞察页的边界很清楚：“不替你下判断，只把反复出现的关系线索安静整理出来。”</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="screens">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">原项目页面</p>
+            <h2>用 Between 自己的页面内容做展示。</h2>
+          </div>
+          <p class="section-copy">
+            下面这个手机预览不是新的产品逻辑。按钮对应原项目里的路由页面：欢迎、添加重要的人、记录、今日、人物、时间线、洞察、隐私。
+          </p>
+        </div>
+
+        <div class="preview-layout">
+          <div class="screen-switcher" id="screen-switcher" aria-label="切换原项目页面">
+            <button class="active" type="button" data-screen="welcome">欢迎</button>
+            <button type="button" data-screen="onboarding">重要的人</button>
+            <button type="button" data-screen="capture">记录瞬间</button>
+            <button type="button" data-screen="today">今日</button>
+            <button type="button" data-screen="people">人物</button>
+            <button type="button" data-screen="timeline">时间线</button>
+            <button type="button" data-screen="insights">洞察</button>
+            <button type="button" data-screen="privacy">隐私</button>
+          </div>
+
+          <div class="phone-area" style="min-height: 700px">
+            <div class="phone-shell">
+              <div class="status-bar">
+                <span>9:41</span>
+                <span class="dynamic-island" aria-hidden="true"></span>
+                <span>●●●</span>
+              </div>
+              <div class="screen" id="interactive-screen"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="logic">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">交互逻辑</p>
+            <h2>展示页跟着原项目的用户路径走。</h2>
+          </div>
+          <p class="section-copy">
+            我把网站里的讲述顺序改成了原应用的主要路由顺序，而不是另写一套概念页。这样放到你的个人网站里，别人看到的是项目本身。
+          </p>
+        </div>
+        <div class="preview-copy">
+          <article class="logic-card">
+            <h3>第一步：添加一个重要的人</h3>
+            <p>对应原项目的 <strong>Onboarding</strong>：名字或昵称、关系标签、自定义关系，然后进入记录页。</p>
+            <code>/onboarding → /capture</code>
+          </article>
+          <article class="logic-card">
+            <h3>第二步：写下一个值得记住的瞬间</h3>
+            <p>对应原项目的 <strong>Capture</strong> 和 <strong>SaveState</strong>：文字、照片、语音入口，点击“记住”后出现保存反馈。</p>
+            <code>/capture → /states/save → /today</code>
+          </article>
+          <article class="logic-card">
+            <h3>第三步：回到今日、人物、时间线、洞察</h3>
+            <p>对应底部导航：今日、重要的人、时间线、洞察。这里才慢慢出现“最近的瞬间”“那些对你重要的人”“关系线索”。</p>
+            <code>/today · /people · /timeline · /insights</code>
+          </article>
+          <article class="logic-card">
+            <h3>第四步：隐私与记忆</h3>
+            <p>对应原项目的 <strong>PrivacySettings</strong>：使用 Face ID、允许 AI 整理线索、开启云同步、导出本地数据、清空本地数据。</p>
+            <code>/settings</code>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="next">
+      <div class="wrap footer-card">
+        <p class="eyebrow">下一步建议</p>
+        <h2>把它作为 AI Lab 项目展示，但内容继续忠于原型。</h2>
+        <p>
+          个人网站上可以写成：Between 是一个记录“重要的人”和“关系瞬间”的 AI 实验。不要包装成完整商业产品，也不要把关系说成人脉管理。它更像一个中文、私密、轻量的关系记忆原型。
+        </p>
+        <div class="actions" style="justify-content:center">
+          <a class="button primary" href="http://127.0.0.1:5173/">打开原型</a>
+          <a class="button" href="./between-ai-lab.md">查看中文项目文案</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    Between AI Lab 页面，基于 Junchun-Wang/between 原项目内容整理。更新时间：2026-09-22。
+  </footer>
+
+  <script>
+    const screens = {
+      welcome: `
+        <p class="eyebrow">Between</p>
+        <h2 class="welcome-title">记住那些<br>重要的人</h2>
+        <div class="welcome-types"><span>文字</span><span>照片</span><span>语音</span></div>
+        <article class="glass-card memory-preview">
+          <h2>一段小小的记忆</h2>
+          <time>今天 22:18</time>
+          <p>那些没有被说出口的细节，也值得被好好保存</p>
+        </article>
+        <p class="soft-note">你的记忆只属于你自己</p>
+        <div class="primary-button">开始</div>
+      `,
+      onboarding: `
+        <p class="eyebrow">RELATION MEMORY</p>
+        <h2 class="screen-title">现在，谁对你<br>很重要？</h2>
+        <p class="screen-copy">先从一个人开始。名字、关系和一点原因，之后都可以慢慢补</p>
+        <article class="glass-card app-card">
+          <h2>名字或昵称</h2>
+          <div class="input-line">王俊淳</div>
+          <p style="margin-top:18px;font-weight:700;color:var(--muted)">你们是什么关系？</p>
+          <div class="chip-row">
+            <span class="chip">朋友</span><span class="chip">导师</span><span class="chip">同学</span>
+            <span class="chip selected">家人</span><span class="chip">其他</span><span class="chip">自定义</span>
+          </div>
+          <p>你可以只先记住一个名字，关系会慢慢长出来</p>
+        </article>
+        <div class="primary-button">继续</div>
+      `,
+      capture: `
+        <p class="eyebrow">FIRST MEMORY</p>
+        <h2 class="screen-title">一个值得<br>记住的瞬间</h2>
+        <p class="screen-copy">不需要完整，只要先留下今天想到的一点点</p>
+        <article class="glass-card app-card">
+          <h2>今天关于王俊淳，你想记住什么？</h2>
+          <div class="textarea-fake">比如一句话、一个场景，或者一种当时的感觉</div>
+          <div class="tool-row"><span class="chip">照片</span><span class="chip">语音</span></div>
+        </article>
+        <article class="glass-card app-card" style="padding:15px;text-align:center">也可以先说出来</article>
+        <div class="primary-button">记住</div>
+      `,
+      today: `
+        <p class="eyebrow">7月23日</p>
+        <h2 class="screen-title">今天</h2>
+        <p class="screen-copy">你和谁之间，发生了什么值得记住的事？</p>
+        <article class="glass-card app-card">
+          <h2>写下一个瞬间</h2>
+          <p>一句话就可以。那些很小的细节，之后会变成关系的线索</p>
+        </article>
+        <p class="eyebrow" style="margin-top:26px">最近的瞬间</p>
+        <article class="glass-card app-card">
+          <h2>写下一句话，今天就会出现在这里。</h2>
+          <p>等待第一条记忆</p>
+        </article>
+        <p class="soft-note">我正在慢慢了解你的关系世界</p>
+        <nav class="bottom-nav"><span class="active">今日</span><span>人物</span><span>时间</span><span>洞察</span></nav>
+      `,
+      people: `
+        <p class="eyebrow">RELATION MEMORY</p>
+        <h2 class="screen-title">人物</h2>
+        <p class="screen-copy">那些对你重要的人，都安静地在这里</p>
+        <article class="glass-card app-card" style="padding:14px 18px">搜索人名、关系或记忆</article>
+        <p class="eyebrow" style="margin-top:24px">最近重要的人</p>
+        <div class="row-list">
+          <div class="row"><div class="avatar">王</div><div><h3>王俊淳</h3><p>家人 · 1 条记忆</p></div><span>最近更新</span></div>
+          <div class="row"><div class="avatar" style="background:var(--blue)">林</div><div><h3>林然</h3><p>朋友 · 0 条记忆</p></div><span>等待第一条</span></div>
+        </div>
+        <nav class="bottom-nav"><span>今日</span><span class="active">人物</span><span>时间</span><span>洞察</span></nav>
+      `,
+      timeline: `
+        <p class="eyebrow">MEMORY TIMELINE</p>
+        <h2 class="screen-title">时间线</h2>
+        <p class="screen-copy">那些小小的瞬间，会慢慢连成关系的形状</p>
+        <article class="glass-card app-card" style="padding:14px 18px">全部记忆 · 最近优先</article>
+        <div class="row-list">
+          <article class="glass-card app-card">
+            <p class="eyebrow">今天</p>
+            <h2>保存第一条记忆后，时间线会从这里开始。</h2>
+            <p>那些很小的瞬间，会按日期慢慢连起来。</p>
+          </article>
+        </div>
+        <nav class="bottom-nav"><span>今日</span><span>人物</span><span class="active">时间</span><span>洞察</span></nav>
+      `,
+      insights: `
+        <p class="eyebrow">关系洞察</p>
+        <h2 class="screen-title">洞察</h2>
+        <p class="screen-copy">不替你下判断，只把反复出现的关系线索安静整理出来</p>
+        <article class="glass-card app-card">
+          <p class="eyebrow">还没有关系记忆</p>
+          <h2>先添加一个重要的人</h2>
+          <p>关系洞察会从第一个人、第一条记忆开始。</p>
+        </article>
+        <nav class="bottom-nav"><span>今日</span><span>人物</span><span>时间</span><span class="active">洞察</span></nav>
+      `,
+      privacy: `
+        <p class="eyebrow">隐私优先</p>
+        <h2 class="screen-title">隐私与记忆</h2>
+        <p class="screen-copy">你可以决定哪些记忆可以被整理，哪些只留给自己。</p>
+        <article class="glass-card app-card">
+          <h2>你的记忆只属于你</h2>
+          <p>Between 会优先把内容保存在本地，敏感记忆不会被默认分享。</p>
+        </article>
+        <div class="row-list">
+          <div class="row"><div class="avatar">✓</div><div><h3>使用 Face ID</h3><p>打开 App 时先确认是你本人。</p></div><span>开</span></div>
+          <div class="row"><div class="avatar" style="background:var(--lilac)">AI</div><div><h3>允许 AI 整理线索</h3><p>只整理你保存过的内容，不替你评价关系。</p></div><span>开</span></div>
+        </div>
+      `,
+    }
+
+    const interactiveScreen = document.querySelector('#interactive-screen')
+    const buttons = [...document.querySelectorAll('#screen-switcher button')]
+
+    function setScreen(name) {
+      interactiveScreen.innerHTML = screens[name]
+      buttons.forEach((button) => button.classList.toggle('active', button.dataset.screen === name))
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => setScreen(button.dataset.screen))
+    })
+
+    setScreen('welcome')
+  </script>
+</body>
+</html>
