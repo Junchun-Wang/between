@@ -1,32 +1,99 @@
-# React + TypeScript + Vite
+# Between
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Between 是一个记录“重要的人”和“关系瞬间”的中文 AI Lab 实验。
 
-Currently, two official plugins are available:
+它不是人际关系管理工具，也不是人脉 CRM。它更像一个私密的关系记忆原型：从一个重要的人开始，用文字、照片或语音保存一个小瞬间，然后让这些瞬间慢慢组成时间线、人物页和关系洞察。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 项目预览
 
-## React Compiler
+- AI Lab 展示页：[docs/ai-lab.html](docs/ai-lab.html)
+- 项目文案：[docs/ai-lab.md](docs/ai-lab.md)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+本地运行原型：
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+打开 Vite 输出的本地地址，例如：
+
+```text
+http://127.0.0.1:5173/
+```
+
+## 核心体验
+
+**欢迎页**
+
+记住那些重要的人。
+
+文字、照片、语音。
+
+你的记忆只属于你自己。
+
+**添加重要的人**
+
+现在，谁对你很重要？
+
+先从一个人开始。名字、关系和一点原因，之后都可以慢慢补。
+
+**记录瞬间**
+
+一个值得记住的瞬间。
+
+不需要完整，只要先留下今天想到的一点点。
+
+比如一句话、一个场景，或者一种当时的感觉。
+
+**今日**
+
+你和谁之间，发生了什么值得记住的事？
+
+一句话就可以。那些很小的细节，之后会变成关系的线索。
+
+**人物**
+
+那些对你重要的人，都安静地在这里。
+
+**时间线**
+
+那些小小的瞬间，会慢慢连成关系的形状。
+
+**洞察**
+
+不替你下判断，只把反复出现的关系线索安静整理出来。
+
+**隐私**
+
+你的记忆只属于你。
+
+你可以决定哪些记忆可以被整理，哪些只留给自己。
+
+## 技术栈
+
+- React
+- TypeScript
+- Vite
+- Zustand
+- Dexie
+- lucide-react
+
+## 项目定位
+
+Between 适合放在个人网站的 AI Lab 里展示。它探索的问题不是“如何管理人际关系”，而是：AI 能不能帮助一个人更轻地保存关系里的细节，并在之后安静地整理出一些线索。
+
+这个项目的重点不是自动化社交，也不是替用户判断关系。它只围绕一个很小的闭环：
+
+1. 添加一个重要的人。
+2. 写下一个值得记住的瞬间。
+3. 在今日、人物、时间线里回看。
+4. 当记忆足够多时，让洞察慢慢浮现。
+
+## 下一步
+
+- 保留中文、手机端、私密关系记忆这个方向。
+- 去掉原型里的 demo fallback 数据，让真实空状态更干净。
+- 把 AI 输出收窄为：事实整理、可能感受、另一种解释、下一句可以怎么说。
+- 数据继续本地优先：导出、删除、可选加密。
+- 个人网站里放在 AI Lab，而不是成熟产品区。
